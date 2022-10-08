@@ -13,7 +13,7 @@ playlist_length = int(
 
 mix_type = inquirer.select(
     message="Mix type",
-    choices=["User library", "User mix", "Track mix", "Artist Mix"],
+    choices=["User library", "User mix", "User recommended", "Track mix", "Artist mix"],
     multiselect=True,
 ).execute()
 
@@ -33,6 +33,8 @@ def get_user_mix(
         url = f"https://www.last.fm/player/station/user/{lastfm_username}/library?page={page_num}&ajax=1"
     elif mix_type == "mix":
         url = f"https://www.last.fm/player/station/user/{lastfm_username}/mix?page={page_num}&ajax=1"
+    elif mix_type == "recommended":
+        url = f"https://www.last.fm/player/station/user/{lastfm_username}/recommended?page={page_num}&ajax=1"
 
     r = requests.get(url, cookies={"sessionid": session_id})
 
@@ -111,9 +113,11 @@ def get_user_mix(
 
 for selection in mix_type:
     if selection == "User library":
-        print(get_user_mix(type="library"))
+        print(get_user_mix(mix_type="library"))
     elif selection == "User mix":
         print(get_user_mix())
+    elif selection == "User recommended":
+        print(get_user_mix(mix_type="recommended"))
     elif selection == "Track mix":
         pass
     elif selection == "Artist mix":
